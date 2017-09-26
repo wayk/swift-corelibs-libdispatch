@@ -2182,6 +2182,20 @@ _dispatch_operation_advise(dispatch_operation_t op, size_t chunk_size)
 #endif
 }
 
+#ifdef __ANDROID__
+static void*
+valloc(size_t size)
+{
+	long pagesize = -1;
+#ifdef _SC_PAGESIZE
+	pagesize = (long) sysconf(_SC_PAGESIZE);
+#endif
+	if (pagesize < 0)
+		pagesize = 4096;
+	return memalign((size_t) pagesize, size);
+}
+#endif
+
 static int
 _dispatch_operation_perform(dispatch_operation_t op)
 {

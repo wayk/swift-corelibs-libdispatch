@@ -128,8 +128,14 @@
 #define _dispatch_preemption_yield_to(th, n) thread_switch(th, \
 		DISPATCH_YIELD_THREAD_SWITCH_OPTION, (mach_msg_timeout_t)(n))
 #else
+#if defined(__ANDROID__)
+#include <sched.h>
+#define _dispatch_preemption_yield(n) sched_yield()
+#define _dispatch_preemption_yield_to(th, n) sched_yield()
+#else
 #define _dispatch_preemption_yield(n) pthread_yield_np()
 #define _dispatch_preemption_yield_to(th, n) pthread_yield_np()
+#endif
 #endif // HAVE_MACH
 
 #pragma mark -

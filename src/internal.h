@@ -382,6 +382,11 @@ DISPATCH_EXPORT DISPATCH_NOTHROW void dispatch_atfork_child(void);
 #define TRASHIT(x) do {(x) = (void *)-1;} while (0)
 #endif
 #endif // DISPATCH_DEBUG
+
+#ifndef TRASHIT
+#define TRASHIT(x) do {(x) = (void *)-1;} while (0)
+#endif
+
 #define _TAILQ_TRASH_ENTRY(elm, field) do { \
 			TRASHIT((elm)->field.tqe_next); \
 			TRASHIT((elm)->field.tqe_prev); \
